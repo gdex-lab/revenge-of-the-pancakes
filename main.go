@@ -12,8 +12,11 @@
 package main
 
 import (
+	"bufio"
 	"errors"
 	"fmt"
+	"os"
+	"strconv"
 )
 
 // pancake represents a happy-face pancake with choclate chips only the on the "true" side
@@ -23,9 +26,43 @@ type pancake bool
 type pancakeStack []pancake
 
 func main() {
-	// take user input
-	fmt.Println("Calculating ...")
+	var input []string
+	var err error
+	numTestCases := 0
+	scanCount := 0
+	scanner := bufio.NewScanner(os.Stdin)
 
+	fmt.Println("Input number of test cases: ")
+	for scanner.Scan() {
+		// if number of test cases is 0, we need to get it first
+		if numTestCases == 0 {
+			numTestCases, err = strconv.Atoi(scanner.Text())
+			if err != nil || numTestCases == 0 {
+				fmt.Errorf("must enter a valid number greater than 0: %v", err)
+				break
+			}
+			// jump to next iteration
+			continue
+		}
+
+		// add items to input
+		scanCount++
+		input = append(input, scanner.Text())
+
+		// if we have reachaed the limit, stop receiving input
+		if scanCount >= numTestCases {
+			break
+		}
+	}
+	for i, item := range input {
+		stack, err := convertInputToPancakeStack(item)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		countOfManeuvers := calculateFlipsForSingleStack(stack, 0) // pass zero, indicating first iteration
+		fmt.Printf("Case #%d: %d\n", i, countOfManeuvers)
+	}
 }
 func convertInputToPancakeStack(input string) (pancakeStack, error) {
 	var stack pancakeStack
@@ -42,6 +79,7 @@ func convertInputToPancakeStack(input string) (pancakeStack, error) {
 }
 
 // calculateFlipsForSingleStack ranges over input pancake stack and determines the count of maneuvers required for all pancakes to be upright
+// flipCount should always start at zero when called by user
 func calculateFlipsForSingleStack(input pancakeStack, flipCount int) int {
 	// indexToFlip is used to track the max index that needs alteration
 	var indexToFlip int
@@ -73,8 +111,8 @@ func flip(input pancakeStack, numberToFlip int) pancakeStack {
 	var flippedPancakes pancakeStack
 
 	// for N to be flipped, append the inverse
-	for _, p := range input[:numberToFlip] {
-		flippedPancakes = append(flippedPancakes, !p)
+	for _, pancake := range input[:numberToFlip] {
+		flippedPancakes = append(flippedPancakes, !pancake)
 	}
 
 	// for remaining pancakes in stack, keep the same
