@@ -26,7 +26,9 @@ type pancake bool
 type pancakeStack []pancake
 
 func main() {
-	var input []string
+
+	var input []pancakeStack
+	var stack pancakeStack
 	var err error
 	numTestCases := 0
 	scanCount := 0
@@ -47,21 +49,24 @@ func main() {
 
 		// add items to input
 		scanCount++
-		input = append(input, scanner.Text())
+		stack, err = convertInputToPancakeStack(scanner.Text())
+		if err != nil {
+			fmt.Println(err)
+			break
+		}
+		input = append(input, stack)
 
 		// if we have reachaed the limit, stop receiving input
 		if scanCount >= numTestCases {
 			break
 		}
 	}
-	for i, item := range input {
-		stack, err := convertInputToPancakeStack(item)
-		if err != nil {
-			fmt.Println(err)
+	if err == nil {
+		fmt.Println("Results:")
+		for i, stack := range input {
+			countOfManeuvers := calculateFlipsForSingleStack(stack, 0) // pass zero, indicating first iteration
+			fmt.Printf("Case #%d: %d\n", i, countOfManeuvers)
 		}
-
-		countOfManeuvers := calculateFlipsForSingleStack(stack, 0) // pass zero, indicating first iteration
-		fmt.Printf("Case #%d: %d\n", i, countOfManeuvers)
 	}
 }
 func convertInputToPancakeStack(input string) (pancakeStack, error) {
