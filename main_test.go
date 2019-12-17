@@ -14,19 +14,13 @@ func TestCalculateFlipsForSingleStack(t *testing.T) {
 		stack5 := pancakeStack{false, false, true, false}
 
 		Convey("When the calculate function is called", func() {
-			res1, err1 := calculateFlipsForSingleStack(stack1)
-			res2, err2 := calculateFlipsForSingleStack(stack2)
-			res3, err3 := calculateFlipsForSingleStack(stack3)
-			res4, err4 := calculateFlipsForSingleStack(stack4)
-			res5, err5 := calculateFlipsForSingleStack(stack5)
+			res1 := calculateFlipsForSingleStack(stack1, 0)
+			res2 := calculateFlipsForSingleStack(stack2, 0)
+			res3 := calculateFlipsForSingleStack(stack3, 0)
+			res4 := calculateFlipsForSingleStack(stack4, 0)
+			res5 := calculateFlipsForSingleStack(stack5, 0)
 
 			Convey("The output should match sample output", func() {
-				So(err1, ShouldBeNil)
-				So(err2, ShouldBeNil)
-				So(err3, ShouldBeNil)
-				So(err4, ShouldBeNil)
-				So(err5, ShouldBeNil)
-
 				So(res1, ShouldEqual, 1)
 				So(res2, ShouldEqual, 1)
 				So(res3, ShouldEqual, 2)
@@ -52,6 +46,22 @@ func TestConvertInputToPancakeStack(t *testing.T) {
 				So(out, ShouldResemble, validOutput)
 
 				So(err2.Error(), ShouldResemble, "Input stack must only include '+' or '-'")
+
+			})
+		})
+	})
+}
+
+func TestFlip(t *testing.T) {
+	Convey("Given input stack", t, func() {
+		input := pancakeStack{true, false, false, true}
+		topTwoFlipped := pancakeStack{false, true, false, true}
+
+		Convey("When the flip function is called for the first two items", func() {
+			out := flip(input, 2)
+
+			Convey("The output should be inverted up to N", func() {
+				So(out, ShouldResemble, topTwoFlipped)
 
 			})
 		})
