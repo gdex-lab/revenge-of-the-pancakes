@@ -31,7 +31,11 @@ func main() {
 	// calculate maneuvers and display results
 	fmt.Println("Results:")
 	for i, stack := range input {
-		countOfManeuvers := calculate.FlipsForSingleStack(stack, 0) // pass zero, indicating first iteration
-		fmt.Printf("Case #%d: %d\n", i+1, countOfManeuvers)
+		countOfManeuvers, err := calculate.ManeuversToGetHappySideUp(stack)
+		if err != nil {
+			fmt.Printf("Case #%d: %d\n", i+1, err)
+		} else {
+			fmt.Printf("Case #%d: %d\n", i+1, countOfManeuvers)
+		}
 	}
 }

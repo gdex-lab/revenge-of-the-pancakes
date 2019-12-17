@@ -6,18 +6,17 @@ import (
 	"fmt"
 	"os"
 	"strconv"
-
-	"github.com/gdexlab/revenge-of-the-pancakes/types"
+	"strings"
 )
 
 // CollectInput scans the cli for user input and returns the slice of pancake stacks for calculation
-func CollectInput() ([]types.PancakeStack, error) {
+func CollectInput() ([]string, error) {
 
-	var input []types.PancakeStack
-	var stack types.PancakeStack
+	var input []string
 	var err error
 	numTestCases := 0
 	scanCount := 0
+	
 	scanner := bufio.NewScanner(os.Stdin)
 
 	fmt.Println("Input number of test cases: ")
@@ -34,7 +33,8 @@ func CollectInput() ([]types.PancakeStack, error) {
 
 		// add items to input
 		scanCount++
-		stack, err = convertInputToPancakeStack(scanner.Text())
+		stack := scanner.Text()
+		err = validateInput(stack)
 		if err != nil {
 			return nil, err
 		}
@@ -50,16 +50,9 @@ func CollectInput() ([]types.PancakeStack, error) {
 }
 
 // convertInputToPancakeStack takes a string of +, - and converts it to a pancake stack of bools
-func convertInputToPancakeStack(input string) (types.PancakeStack, error) {
-	var stack types.PancakeStack
-	for _, item := range input {
-		if item == '+' {
-			stack = append(stack, types.Pancake(true))
-		} else if item == '-' {
-			stack = append(stack, types.Pancake(false))
-		} else {
-			return nil, errors.New("Input stack must only include '+' or '-'")
-		}
+func validateInput(input string) error {
+	if strings.ReplaceAll(strings.ReplaceAll(input, "+", ""), "-", "") != "" {
+		return errors.New("Input stack must only include '+' or '-'")
 	}
-	return stack, nil
+	return nil
 }

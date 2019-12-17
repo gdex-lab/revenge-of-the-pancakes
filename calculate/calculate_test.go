@@ -3,24 +3,23 @@ package calculate
 import (
 	"testing"
 
-	"github.com/gdexlab/revenge-of-the-pancakes/types"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestCalculateFlipsForSingleStack(t *testing.T) {
 	Convey("Given example stacks as input", t, func() {
-		stack1 := types.PancakeStack{false}
-		stack2 := types.PancakeStack{false, true}
-		stack3 := types.PancakeStack{true, false}
-		stack4 := types.PancakeStack{true, true, true}
-		stack5 := types.PancakeStack{false, false, true, false}
+		stack1 := pancakeStack{false}
+		stack2 := pancakeStack{false, true}
+		stack3 := pancakeStack{true, false}
+		stack4 := pancakeStack{true, true, true}
+		stack5 := pancakeStack{false, false, true, false}
 
 		Convey("When the calculate function is called", func() {
-			res1 := FlipsForSingleStack(stack1, 0)
-			res2 := FlipsForSingleStack(stack2, 0)
-			res3 := FlipsForSingleStack(stack3, 0)
-			res4 := FlipsForSingleStack(stack4, 0)
-			res5 := FlipsForSingleStack(stack5, 0)
+			res1 := flipsForSingleStack(stack1, 0)
+			res2 := flipsForSingleStack(stack2, 0)
+			res3 := flipsForSingleStack(stack3, 0)
+			res4 := flipsForSingleStack(stack4, 0)
+			res5 := flipsForSingleStack(stack5, 0)
 
 			Convey("The output should match sample output", func() {
 				So(res1, ShouldEqual, 1)
@@ -36,8 +35,8 @@ func TestCalculateFlipsForSingleStack(t *testing.T) {
 
 func TestFlip(t *testing.T) {
 	Convey("Given input stack", t, func() {
-		input := types.PancakeStack{true, false, false, true}
-		topTwoFlipped := types.PancakeStack{false, true, false, true}
+		input := pancakeStack{true, false, false, true}
+		topTwoFlipped := pancakeStack{false, true, false, true}
 
 		Convey("When the flip function is called for the first two items", func() {
 			out := flip(input, 2)
