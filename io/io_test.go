@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestConvertInputToPancakeStack(t *testing.T) {
+func TestValidateInput(t *testing.T) {
 	Convey("Given input string", t, func() {
 		validInput := "+--+"
 		invalidInput := "+XX+"
